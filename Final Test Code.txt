@@ -1,0 +1,85 @@
+;-------------------------------------------------------------------------------
+; MSP430 Assembler Code Template for use with TI Code Composer Studio
+;
+;
+;-------------------------------------------------------------------------------
+            .cdecls C,LIST,"msp430.h"       ; Include device header file
+            
+;-------------------------------------------------------------------------------
+            .def    RESET                   ; Export program entry-point to
+                                            ; make it known to linker.
+;-------------------------------------------------------------------------------
+            .text                           ; Assemble into program memory.
+            .retain                         ; Override ELF conditional linking
+                                            ; and retain current section.
+            .retainrefs                     ; And retain any sections that have
+                                            ; references to current section.
+
+;-------------------------------------------------------------------------------
+RESET       mov.w   #__STACK_END,SP         ; Initialize stackpointer
+StopWDT     mov.w   #WDTPW|WDTHOLD,&WDTCTL  ; Stop watchdog timer
+
+
+;-------------------------------------------------------------------------------
+; Main loop here
+;-------------------------------------------------------------------------------
+;SETUP1
+;				setz
+;				mov.w #0x1234, R5
+;				mov.w #0xA006, R6
+;				mov.w #5800h,  &0200h
+;				mov.w #5700h,  &0202h
+;				mov.w #5600h,  &0204h
+;				mov.w #5500h,  &0206h
+
+;PROGRAM1		mov.w #0x9599, R5
+;				mov.w #0x0206, R6
+;				mov.b R5, 0(R6)
+;				NOP
+
+;SETUP2			clrz
+;				setn
+;				mov.w #0206h, R5
+;				mov.w #0208h, R6
+;				mov.w #8800h, &0200h
+;				mov.w #8700h, &0202h
+;				mov.w #8600h, &0204h
+;				mov.w #8500h, &0206h
+
+
+;PROGRAM2		mov.w  @R5+, -8(R6)
+;				bis.b #0x0008, R6
+;				inv.b -6(R5)
+;				NOP
+
+SETUP3			clrz
+				clrn
+				setc
+				;set v
+				mov.w #0101h, R5
+				mov.w #0202h, R6
+				mov.w #9808h, &0200h
+				mov.w #9707h, &0202h
+				mov.w #9606h, &0204h
+				mov.w #9505h, &0206h
+
+PROGRAM3		addc.w R5, R6
+				incd.w R6
+				rrc.b &0x200
+				NOP
+
+Mainloop		jmp     Mainloop       	;Infinite Loop
+                                            
+
+;-------------------------------------------------------------------------------
+; Stack Pointer definition
+;-------------------------------------------------------------------------------
+            .global __STACK_END
+            .sect   .stack
+            
+;-------------------------------------------------------------------------------
+; Interrupt Vectors
+;-------------------------------------------------------------------------------
+            .sect   ".reset"                ; MSP430 RESET Vector
+            .short  RESET
+            

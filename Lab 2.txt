@@ -1,0 +1,78 @@
+ARY1        .set 0x0200         ;Memory allocation ARY1
+ARY1S       .set 0x0210         ;Memory allocation ARY1S
+ARY2        .set 0x0220         ;Memory allocation ARY2
+ARY2S       .set 0x0230         ;Memory allocation ARY2S
+
+            clr R4              ;Clear Register
+            clr R5              ;Clear Register
+            clr R6              ;Clear Register
+
+SORT1       mov.w #ARY1, R4     ;
+            mov.w #ARY1S, R6
+            call #ArraySetup1
+            call #COPY
+            call #SORT
+
+SORT2       mov.w #ARY2, R4
+            mov.w #ARY2S, R6
+            call #ArraySetup2
+            call #COPY
+            call #SORT
+
+Mainloop   jmp Mainloop
+
+ArraySetup1 mov.b #10,  0(R4)
+            mov.b #43,  1(R4)
+            mov.b #-19, 2(R4)
+            mov.b #77,  3(R4)
+            mov.b #-44, 4(R4)
+            mov.b #24,  5(R4)
+            mov.b #-82, 6(R4)
+            mov.b #-55, 7(R4)
+            mov.b #16,  8(R4)
+            mov.b #-18, 9(R4)
+            mov.b #99,  10(R4)
+            ret
+
+ArraySetup2 mov.b #10,  0(R4)
+            mov.b #25,  1(R4)
+            mov.b #12,  2(R4)
+            mov.b #61,  3(R4)
+            mov.b #-76, 4(R4)
+            mov.b #-90, 5(R4)
+            mov.b #23,  6(R4)
+            mov.b #98,  7(R4)
+            mov.b #97,  8(R4)
+            mov.b #60,  9(R4)
+            mov.b #-77, 10(R4)
+            ret
+
+COPY        mov.b 0(R4), R10
+            inc.b R10
+            mov.w R4,    R5
+            mov.w R6,    R7
+LP          mov.w @R5+, 0(R7)
+            inc.w R7
+            dec   R10
+            jnz   LP
+            ret
+
+SORT        mov.b @R6, R8
+
+outerloop   mov.w R8, R9
+            dec   R8
+            jz    done
+            mov.w R6, R7
+            inc   R7
+
+innerloop   dec R9
+            jz outerloop
+            mov.b @R7+, R10
+            cmp.b R10, 0(R7)
+            jge   innerloop
+            mov.b @R7, -1(R7)
+            mov.b R10, 0(R7)
+            jmp   innerloop
+
+done        ret
+                                            

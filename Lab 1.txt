@@ -1,0 +1,26 @@
+;LAB 1
+
+Setup          clr.w   R4        ;Clearing all registers
+               clr.w   R5
+               clr.w   R6
+               clr.w   R7
+               clr.w   R10
+
+               mov.w   #04, R4   ;Setting up values for R4, R5, R6, and R10
+               mov.w   #03, R5
+               mov.w   #10, R6
+               mov.w   #15, R10
+
+Addition       mov.w R4, R7      ;Moving R7 to R4 now R7 = 4
+               add.w R5, R7      ;Adding R7 with R5 = 4+3 = 7
+               add.w R6, R7      ;Adding R7 with R6 = 7+10 = 17
+
+Substraction   sub.w R10, R7     ;Substracting R7 from R10 = 17-15 = 2
+
+Store		   mov.w R4, &0200h
+               mov.w R5, &0202h
+               mov.w R6, &0204h
+               mov.w R10, &0206h
+               mov.w R7, &0208h
+
+Mainloop	   jmp     Mainloop  ;Infinite Loop, millions of times per second
