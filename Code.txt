@@ -1,0 +1,11 @@
+x = -1:.25:1;
+
+Rx=zeros(size(x));
+Rx=1-((1/2)+(1/pi)*asin(x));
+
+Hx=zeros(size(x));
+Hx=(1./(pi*sqrt(1-x.^2)))./(Rx);
+
+plot(x,Rx,x,Hx);
+xlabel('x');
+legend('R(x)','H(x)');
